@@ -32,7 +32,7 @@ public class CleanerEnv extends Environment {
         model = new CleanerModel();
         view  = new CleanerView(model);
         model.setView(view);
-        updatePercepts();
+        //updatePercepts();
     }
 
     @Override
@@ -63,24 +63,31 @@ public class CleanerEnv extends Environment {
         return true;
     }
 
-    /** creates the agents perception based on the MarsModel */
+    /** creates the agents perception based on the CleanerModel */
     void updatePercepts() {
         clearPercepts();
 
         Location s1Loc = model.getAgPos(0);
         Location r1Loc = model.getAgPos(1);
 
-        Literal pos1 = Literal.parseLiteral("pos(r1," + s1Loc.x + "," + s1Loc.y + ")");
-        Literal pos2 = Literal.parseLiteral("pos(r2," + r1Loc.x + "," + r1Loc.y + ")");
+        Literal pos1 = Literal.parseLiteral("pos(senzor," + s1Loc.x + "," + s1Loc.y + ")");
+        Literal pos2 = Literal.parseLiteral("pos(cleaner," + r1Loc.x + "," + r1Loc.y + ")");
 
         addPercept(pos1);
         addPercept(pos2);
 
+        //Literal pos1 = Literal.parseLiteral("pos(senzor," + s1Loc.x + "," + s1Loc.y + ")");
+        //removePerceptsByUnif("senzor",pos1);
+        //addPercept(pos1);
+
         if (model.hasObject(GARB, s1Loc)) {
-            addPercept(s1);
+            addPercept("senzor",s1);
+        }
+        else{
+            removePercept("senzor",s1);
         }
         if (model.hasObject(GARB, r1Loc)) {
-            addPercept(r1);
+            //addPercept(r1);
         }
     }
 
