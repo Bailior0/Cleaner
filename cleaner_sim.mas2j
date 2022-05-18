@@ -1,0 +1,13 @@
+MAS cleaner_sim {
+
+    infrastructure: Centralised
+
+    environment: CleanerEnv
+
+    agents:
+        cleaner;
+        sensor;
+        controller;
+
+    //aslSourcePath: "asl";
+}

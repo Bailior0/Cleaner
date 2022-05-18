@@ -1,8 +1,0 @@
-MAS robotCleaner {
-
-    infrastructure: Centralised
-
-    environment: CleanerEnv
-
-    agents: cleaner; senzor; controller;
-}

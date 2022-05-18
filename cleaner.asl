@@ -1,7 +1,5 @@
 checking_cells.
 
-
-
 at(P) :- pos(P,X,Y) & pos(cleaner,X,Y).
 
 +!ensure_pick(S)
@@ -20,8 +18,6 @@ at(P) :- pos(P,X,Y) & pos(cleaner,X,Y).
 	  
 +garbage(cleaner) : true
 	<- !ensure_pick(S).
-
-
 
 
 
