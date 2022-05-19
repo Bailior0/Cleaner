@@ -2,11 +2,12 @@ MAS cleaner_sim {
 
     infrastructure: Centralised
 
-    environment: CleanerEnv
+    environment: cleanerSim.HouseEnv
 
     agents:
-        cleaner;
+        cleaner #4;
         sensor;
+            //agentClass cleanerSim.Entity;
         controller;
 
     //aslSourcePath: "asl";

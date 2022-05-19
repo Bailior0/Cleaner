@@ -70,7 +70,7 @@ public class CleanerEnv extends Environment {
         Location s1Loc = model.getAgPos(0);
         Location r1Loc = model.getAgPos(1);
 
-        Literal pos1 = Literal.parseLiteral("pos(sensor," + s1Loc.x + "," + s1Loc.y + ")");
+        Literal pos1 = Literal.parseLiteral("pos(self," + s1Loc.x + "," + s1Loc.y + ")");
         Literal pos2 = Literal.parseLiteral("pos(cleaner," + r1Loc.x + "," + r1Loc.y + ")");
 
         addPercept(pos1);

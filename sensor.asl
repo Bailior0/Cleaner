@@ -6,7 +6,7 @@
 
 +!check(slots) : garbage(sensor)
    <- 
-   ?pos(sensor,X,Y);
+   ?pos(self,X,Y);
    .send(controller,achieve,garbage(X,Y));
    next(slot);
    !check(slots).
