@@ -5,6 +5,7 @@ import jason.environment.grid.Location;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class HouseWorldView extends JFrame {
 
@@ -94,38 +95,15 @@ public class HouseWorldView extends JFrame {
     }
 
 
-    /** method to draw unknown object, probably overridden by the user viewer class */
-    public void draw(Graphics g, int x, int y, int object) {
-        g.setColor(Color.black);
-        drawString(g,x,y,defaultFont,String.valueOf(object));
-    }
-
     private static int limit = (int)Math.pow(2,14);
 
     private void draw(Graphics g, int x, int y) {
-        /*
-        if ((model.data[x][y] & GridWorldModel.OBSTACLE) != 0) {
-            drawObstacle(g, x, y);
-        }
 
-
-        int vl = GridWorldModel.OBSTACLE*2;
-        while (vl < limit) {
-            if ((model.data[x][y] & vl) != 0) {
-                draw(g, x, y, vl);
-            }
-            vl *= 2;
-        }
-
-        if ((model.data[x][y] & GridWorldModel.AGENT) != 0) {
-            drawAgent(drawArea.getGraphics(), x, y, Color.blue, model.getAgAtPos(x, y));
-        }
-         */
         var location = new Location(x,y);
         var ag =
                 this.model.agLocation
                         .entrySet().stream()
-                        .filter(p->p.getValue().equals(location))
+                        .filter(p->p.getValue().loc.equals(location))
                         .findFirst();
         if(ag.isPresent()){
             var agName = ag.get().getKey();
@@ -138,7 +116,8 @@ public class HouseWorldView extends JFrame {
         }
 
         if(model.dirtMap[x][y] > 0){
-            draw(g,x,y,model.dirtMap[x][y]);
+            g.setColor(Color.black);
+            drawString(g,x,y,defaultFont,String.valueOf(model.dirtMap[x][y]));
         }
     }
 
@@ -166,25 +145,44 @@ public class HouseWorldView extends JFrame {
 
         private static final long serialVersionUID = 1L;
 
+        BufferedImage backImage = null;
+
+        int height;
+        int width;
+
         public void paint(Graphics g) {
             cellSizeW = drawArea.getWidth() / model.getWidth();
             cellSizeH = drawArea.getHeight() / model.getHeight();
             int mwidth = model.getWidth();
             int mheight = model.getHeight();
 
-            g.setColor(Color.lightGray);
-            for (int l = 1; l <= mheight; l++) {
-                g.drawLine(0, l * cellSizeH, mwidth * cellSizeW, l * cellSizeH);
+            if (backImage == null || height != drawArea.getHeight() || width != drawArea.getWidth()) {
+                backImage = (BufferedImage) this.createImage(drawArea.getWidth(), drawArea.getHeight());
+                var g2 = backImage.createGraphics();
+
+
+                g2.setColor(Color.lightGray);
+                for (int l = 1; l <= mheight; l++) {
+                    g2.drawLine(0, l * cellSizeH, mwidth * cellSizeW, l * cellSizeH);
+                }
+                for (int c = 1; c <= mwidth; c++) {
+                    g2.drawLine(c * cellSizeW, 0, c * cellSizeW, mheight * cellSizeH);
+                }
+
+                g2.dispose();
             }
-            for (int c = 1; c <= mwidth; c++) {
-                g.drawLine(c * cellSizeW, 0, c * cellSizeW, mheight * cellSizeH);
-            }
+            width = drawArea.getWidth();
+            height = drawArea.getHeight();
+
+            g.drawImage(backImage, 0, 0, null);
 
             for (int x = 0; x < mwidth; x++) {
                 for (int y = 0; y < mheight; y++) {
                     draw(g,x,y);
                 }
             }
+
+            g.dispose();
         }
     }
 }

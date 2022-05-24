@@ -5,10 +5,13 @@ MAS cleaner_sim {
     environment: cleanerSim.HouseEnv
 
     agents:
-        cleaner #4;
+        cleaner [size=5]
+            agentClass cleanerSim.Entity
+         #4;
+        cleaner [size=15]
+            agentClass cleanerSim.Entity
+         #2;
         sensor;
-            //agentClass cleanerSim.Entity;
         controller;
-
-    //aslSourcePath: "asl";
+        dumpster;
 }

@@ -10,22 +10,17 @@ import jason.environment.grid.Location;
 
 public class Entity extends Agent {
 
-    private Literal pos = Literal.parseLiteral("pos(self,X,Y)");
-
-    public Location location;
+    private Literal pos = Literal.parseLiteral("capacity(self, X)");
 
     @Override
-    public boolean believes(LogicalFormula bel, Unifier un) {
+    public void initAg() {
+        super.initAg();
 
-        if(bel.equals(pos)) {
-            System.out.println("asd");
-            var a = Literal.parseLiteral("pos(self,"+1+","+ 2 +")");
-            //un.compose(a);
-            un.bind(new VarTerm("X"), new NumberTermImpl(location.x));
-            un.bind(new VarTerm("Y"), new NumberTermImpl(location.y));
-            return true;
-        }
+        var b = getTS().getSettings().getUserParameter("size");
+        System.out.println(b);
+        var cap = Integer.parseInt(b);
 
-        return super.believes(bel, un);
+        this.addInitialBel(Literal.parseLiteral("capacity(self,"+cap+")"));
     }
+
 }

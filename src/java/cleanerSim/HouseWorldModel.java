@@ -13,8 +13,8 @@ public class HouseWorldModel {
     int[][] dirtMap;
     int[][] dirtTypeMap;
 
-    Map<String, Location> agLocation = new Hashtable<>();
-
+    Map<String, Cleaner> agLocation = new Hashtable<>();
+    public Location dumpsterLocation = new Location(0,0);
     protected HouseWorldView view;
 
     public HouseWorldView getView() {
@@ -46,7 +46,7 @@ public class HouseWorldModel {
     }
 
     void nextSlot(String ag) throws Exception {
-        Location senzor = agLocation.get(ag);
+        Location senzor = getCleaner(ag).loc;
         senzor.x++;
         if (senzor.x == getWidth()) {
             senzor.x = 0;
@@ -54,17 +54,15 @@ public class HouseWorldModel {
         }
         // finished searching the whole grid
         if (senzor.y == getHeight()) {
-            //setAgPos(0, 0, 0);
-            agLocation.put(ag, new Location(0,0));
-            senzor = agLocation.get(ag);
+            getCleaner(ag).loc = new Location(0,0);
+            senzor = getCleaner(ag).loc;
         }
-        //setAgPos(1, getAgPos(1));
-        //setAgPos(0, senzor);
-        agLocation.put(ag, senzor);
+
+        getCleaner(ag).loc = senzor;
     }
 
     void moveTowards(String ag, int x, int y) throws Exception {
-        Location cleaner = agLocation.get(ag);
+        Location cleaner = getAgPos(ag);
         if (cleaner.x < x)
             cleaner.x++;
         else if (cleaner.x > x)
@@ -73,15 +71,19 @@ public class HouseWorldModel {
             cleaner.y++;
         else if (cleaner.y > y)
             cleaner.y--;
-        agLocation.put(ag, cleaner);
+        getCleaner(ag).loc = cleaner;
     }
 
-    void pickGarb(Location loc){
-        pickGarb(loc.x,loc.y);
+    void pickGarb(String agName,Location loc){
+        pickGarb(agName,loc.x,loc.y);
     }
 
-    void pickGarb(int x, int y) {
+    void pickGarb(String agName, int x, int y) {
+        int amount = dirtMap[x][y];
         dirtMap[x][y] = 0;
+
+        getCleaner(agName).currentAmount += amount;
+
         /*if (model.hasObject(GARB, getAgPos(1))) {
             if (random.nextBoolean() || nerr == MErr) {
                 remove(GARB, getAgPos(1));
@@ -100,9 +102,19 @@ public class HouseWorldModel {
     }
 
     public Location getAgPos(String agName) {
-        if(!agLocation.containsKey(agName)){
-            agLocation.put(agName, new Location(0,0));
+        return getCleaner(agName).loc;
+    }
+
+    public Cleaner getCleaner(String ag){
+        if(agLocation.containsKey(ag)){
+            return agLocation.get(ag);
         }
-        return agLocation.get(agName);
+        var a = new Cleaner();
+        agLocation.put(ag,a);
+        return a;
+    }
+
+    public void putGarb(String ag) {
+        getCleaner(ag).currentAmount = 0;
     }
 }
