@@ -4,6 +4,8 @@ import jason.asSyntax.*;
 import jason.environment.Environment;
 import jason.environment.TimeSteppedEnvironment;
 import jason.environment.grid.Location;
+import jason.infra.local.BaseLocalMAS;
+import jason.mas2j.MAS2JProject;
 
 import java.util.Collection;
 import java.util.Random;
@@ -28,6 +30,7 @@ public class HouseEnv extends Environment {
     public void init(String[] args) {
         super.init(new String[] {  } ); // set step timeout
         //setOverActionsPolicy(OverActionsPolicy.ignoreSecond);
+
 
         model = new HouseWorldModel(HouseSize,HouseSize);
         view  = new HouseWorldView(model);
@@ -73,6 +76,7 @@ public class HouseEnv extends Environment {
 
     void updateAgPercept(String agName) {
         clearPercepts(agName);
+
 
 
         Location l = model.getAgPos(agName);

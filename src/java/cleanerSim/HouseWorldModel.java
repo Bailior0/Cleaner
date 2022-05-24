@@ -2,8 +2,8 @@ package cleanerSim;
 
 import jason.environment.grid.Location;
 
-import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 public class HouseWorldModel {
@@ -31,6 +31,10 @@ public class HouseWorldModel {
 
     public int getHeight() {
         return height;
+    }
+
+    public List<Map.Entry<String, Cleaner>> getAgs(){
+        return agLocation.entrySet().stream().toList();
     }
 
     public HouseWorldModel(int x, int y) {
