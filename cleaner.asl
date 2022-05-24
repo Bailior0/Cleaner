@@ -1,5 +1,12 @@
 cleaning.
 
+!register.
+
++!register
+ <-
+ .my_name(M);
+ .send(controller,tell,register(M)).
+
 hasSpaceFor(A) :-
     stored(cleaner, C) &
     capacity(self, X) &

@@ -58,7 +58,7 @@ public class HouseEnv extends Environment {
 
     protected void stepFinished(int step, long time, boolean timeout) {
 
-        if( rnd.nextInt(100) < 50) {
+        if( rnd.nextInt(100) < 35) {
             int x = rnd.nextInt(HouseSize);
             int y = rnd.nextInt(HouseSize);
             model.addDirt(x,y,rnd.nextInt(3)+1);

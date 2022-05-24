@@ -30,7 +30,7 @@ public class HouseWorldView extends JFrame {
     private AbstractTableModel tableModel;
 
     public HouseWorldView(HouseWorldModel model) {
-        this(model, "Cleaner World", 600);
+        this(model, "Cleaner World", 1200);
         defaultFont = new Font("Arial", Font.BOLD, 18); // change default font
         setVisible(true);
         repaint();

@@ -18,7 +18,14 @@ public class Resources {
     /**
      * The singleton instance that can be accessed
      */
-    public static Resources Instance;
+    private static Resources Instance;
+
+    public static Resources getInstance(){
+        if(Instance == null)
+            Instance = new Resources();
+
+        return Instance;
+    }
 
     private BufferedImage image;
 
@@ -28,11 +35,6 @@ public class Resources {
     public Resources() {
         Instance = this;
 
-        try {
-            image = ImageIO.read(Resources.Instance.getFileFromResources("images/icons.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

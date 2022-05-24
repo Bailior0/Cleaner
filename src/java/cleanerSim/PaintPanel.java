@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -25,6 +26,7 @@ public class PaintPanel extends JPanel{
     // Indicate if painting is already in progress
     public static boolean paintingInProgress = false;
     private HouseWorldModel model;
+    private BufferedImage trash_icon;
 
     /**
      * Constructor of the pain panel
@@ -46,6 +48,15 @@ public class PaintPanel extends JPanel{
         indexedColors[6] = Color.orange;
         indexedColors[7] = Color.gray;
         indexedColors[8] = Color.white;
+
+        try {
+            File fileFromResources = Resources.getInstance().getFileFromResources("delete-circle.png");
+            if(fileFromResources != null)
+                trash_icon = ImageIO.read(fileFromResources);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
     
     /**
@@ -111,14 +122,14 @@ public class PaintPanel extends JPanel{
             var loc = ag.getValue().loc;
             Rectangle rect = new Rectangle(loc.x * cellSize + 1, loc.y * cellSize + 1, cellSize - 1, cellSize - 1);
 
-            if(agName.contains("sensor")) {
-                drawSensor(g,rect, loc.x, loc.y);
+            if(agName.contains("dumpster")) {
+                drawDumpster(g,rect,loc.x, loc.y);
             }
             else if(agName.contains("cleaner")) {
                 drawCleaner(g,rect,loc.x, loc.y,agName.replace("cleaner","c"));
             }
-            else if(agName.contains("dumpster")) {
-                drawDumpster(g,rect,loc.x, loc.y);
+            else if(agName.contains("sensor")) {
+                drawSensor(g,rect, loc.x, loc.y);
             }
 
         }
@@ -127,13 +138,14 @@ public class PaintPanel extends JPanel{
     }
 
     private void drawDumpster(Graphics g, Rectangle rect, int x, int y) {
-        try {
-            BufferedImage img = ImageIO.read(Resources.Instance.getFileFromResources("delete-circle.png"));
-            g.drawImage(img, x, y,null);
+        if(trash_icon == null){
+            g.setColor(Color.red);
+            g.fillRect(rect.x, rect.y, rect.width, rect.height);
+            g.setColor(Color.BLACK);
+            return;
+        }
 
-        }catch (Exception e){}
-
-
+        g.drawImage(trash_icon,x,y,cellSize,cellSize,null);
     }
 
     private void drawSensor(Graphics g,Rectangle rect, int x, int y){
@@ -149,7 +161,7 @@ public class PaintPanel extends JPanel{
 
     public void drawAgent(Graphics g,Rectangle rect, int x, int y, Color c, int id) {
         g.setColor(c);
-        g.fillOval(x * cellSize + 2, y * cellSize + 2, cellSize - 4, cellSize - 4);
+        g.fillOval(x * cellSize + 5, y * cellSize + 5, cellSize - 10, cellSize - 10);
         if (id >= 0) {
             g.setColor(Color.black);
             drawCenteredString(g,String.valueOf(id+1), rect, g.getFont());
